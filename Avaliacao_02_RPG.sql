@@ -1,0 +1,54 @@
+-- 1. CRIAÇÃO DO BANCO DE DADOS
+CREATE DATABASE JogoRpgDB;
+GO
+
+-- SELEÇÃO DO BANCO DE DADOS PARA CRIAR AS TABELAS DENTRO DELE
+USE JogoRpgDB;
+GO
+
+-- 2. CRIAÇÃO DAS TABELAS (Ordem de dependência)
+
+-- Tabela 1: USUARIOS (Não possui chaves estrangeiras)
+CREATE TABLE USUARIOS
+(
+    UsuarioId INT PRIMARY KEY IDENTITY,
+    Email VARCHAR(120) NOT NULL UNIQUE,
+    Senha VARCHAR(120) NOT NULL
+);
+GO
+
+-- Tabela 2: CLASSES (Não possui chaves estrangeiras)
+CREATE TABLE CLASSES
+(
+    ClasseId INT PRIMARY KEY IDENTITY,
+    Nome VARCHAR(80) NOT NULL UNIQUE,
+    Descricao TEXT NOT NULL
+);
+GO
+
+-- Tabela 3: HABILIDADES (Não possui chaves estrangeiras)
+CREATE TABLE HABILIDADES
+(
+    HabilidadeId INT PRIMARY KEY IDENTITY,
+    Nome VARCHAR(80) NOT NULL UNIQUE
+);
+GO
+
+-- Tabela 4: PERSONAGENS (Possui chaves estrangeiras para USUARIOS e CLASSES)
+CREATE TABLE PERSONAGENS
+(
+    PersonagemId INT PRIMARY KEY IDENTITY,
+    NomePersonagem VARCHAR(80) NOT NULL,
+    UsuarioId INT FOREIGN KEY REFERENCES USUARIOS(UsuarioId),
+    ClasseId INT FOREIGN KEY REFERENCES CLASSES(ClasseId)
+);
+GO
+
+-- Tabela 5: CLASSES_HABILIDADES (Tabela Intermediária N:N com Chave Primária Composta)
+CREATE TABLE CLASSES_HABILIDADES
+(
+    ClasseId INT FOREIGN KEY REFERENCES CLASSES(ClasseId),
+    HabilidadeId INT FOREIGN KEY REFERENCES HABILIDADES(HabilidadeId),
+    PRIMARY KEY (ClasseId, HabilidadeId)
+);
+GO
